@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import java.util.Objects;
 
+import static org.mockito.Mockito.when;
+
 /**
  * Test class for UserService.java
  */
@@ -18,7 +20,7 @@ public class UserServiceTest {
     public void testAddUser_addsUser()
     {
         fixture.givenUserIsInitialized("Ahmed",10,0);
-        fixture.whenUserIsAdded();
+        fixture.whenUserIsAddedSuccessfully();
         fixture.thenAssertionResultsInEquality(1);
     }
     @Test(expected = IllegalArgumentException.class)
@@ -26,7 +28,7 @@ public class UserServiceTest {
     {
         try{
             fixture.givenUserIsInitialized("Ahmed",-10,0);
-            fixture.whenUserIsAdded();
+            fixture.whenUserIsNotAddedSuccessfully();
         }catch (IllegalArgumentException e)
         {
             fixture.thenAssertionResultsInEquality(0);
@@ -90,11 +92,13 @@ class Fixture{
         this.userMock.setAge(age);
         this.userMock.setId(id);
         this.userService.addUser(userMock);
-//        when(userService.addUser(userMock)).thenReturn(userMock);
     }
-    public void whenUserIsAdded() {
+    public void whenUserIsAddedSuccessfully() {
         this.userService.addUser(userMock);
-//        when(userService.addUser(userMock)).thenReturn(userMock);
+    }
+    public void whenUserIsNotAddedSuccessfully() {
+        when(userMock.getAge()).thenReturn(-1);     //specifying Mocked object to get Age=-1
+        this.userService.addUser(userMock);
     }
     public void thenAssertionResultsInEquality(int expectedCount) {
         this.expectedCount= expectedCount;
@@ -116,14 +120,11 @@ class Fixture{
         this.userMock.setAge(age);
         this.userMock.setId(id);
     }
-
     public void whenUserIsEdited(String newName, int newAge) {
         String updatedName = newName;
         int updatedAge = newAge;
         this.userService.editUser(userMock.getId(),updatedName,updatedAge);
-//        when(userService.editUser(userMock.getId(),newName,newAge)).thenReturn(userMock);
     }
-
     public void thenAssertEqualityCheckOnEditUser() {
         User updatedUser = userService.getUsers().get(userMock.getId());
         boolean checkEqual = Objects.equals(userMock,updatedUser);
