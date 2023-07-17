@@ -8,8 +8,6 @@ import java.util.List;
  */
 public class UserService {
     List<User> users = new ArrayList<User>();
-    User user = new User("Ali",10,1);
-
     /**
      * Adds a new and valid user to List of Users
      * @param user an object of User class along with attributes
@@ -38,7 +36,7 @@ public class UserService {
      * @param newName new name to be edited and updated
      * @param newAge new age to be edited and updated
      */
-    public User editUser(int id, String newName, int newAge) {
+    public void editUser(int id, String newName, int newAge) {
             try{
                 if(newName == "" || newAge <= 0){
                     throw new IllegalArgumentException();
@@ -54,7 +52,6 @@ public class UserService {
             {
                 System.out.println("desired user ID is out of Users Array bounds");
             }
-        return user;
     }
     /**
      * Function to get the complete list of users
@@ -64,12 +61,4 @@ public class UserService {
     {
         return users;
     }
-    /**
-     * Function to get the total count of all users in List
-     * @return returns count of users in List
-     */
-    public int getUsersCount(){
-        return users.size();
-    }
-
 }
